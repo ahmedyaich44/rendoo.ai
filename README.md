@@ -17,6 +17,10 @@ Build a mobile-first activity booking experience inspired by the provided Rendoo
 - **Tailwind CSS 4**
 - **Supabase** (Auth + Postgres + RLS + RPC)
 
+## Live Demo
+
+- **Production URL:** `https://rendoo-ai-coral.vercel.app/`
+
 ## What I Added / Implemented
 
 ### 1. Authentication
@@ -98,11 +102,10 @@ Notes:
 
 In Supabase dashboard:
 - Set **Site URL**:
-  - local: `http://localhost:3000`
-  - production: `https://your-domain`
+  - `https://rendoo-ai-coral.vercel.app`
 - Add redirect URLs:
-  - `http://localhost:3000/auth/callback`
-  - `https://your-domain/auth/callback`
+  - `https://rendoo-ai-coral.vercel.app/auth/callback`
+  - `http://localhost:3000/auth/callback` (optional, local dev only)
 
 ## Run Locally
 

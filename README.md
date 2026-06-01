@@ -1,36 +1,142 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rendoo.ai - Candidate Assignment (Next.js + Supabase)
 
-## Getting Started
+This project is my implementation of the **Rendoo Candidate Assignment (Clone + Improvement)** using **Next.js App Router** and **Supabase**.
 
-First, run the development server:
+## Assignment Goal
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Build a mobile-first activity booking experience inspired by the provided Rendoo design, then improve UX and complete the core product flow:
+- authentication
+- activities discovery
+- booking
+- reservation management
+
+## Tech Stack
+
+- **Next.js 16** (App Router, TypeScript)
+- **React 19**
+- **Tailwind CSS 4**
+- **Supabase** (Auth + Postgres + RLS + RPC)
+
+## What I Added / Implemented
+
+### 1. Authentication
+- Email/password signup & signin
+- Google OAuth signin/signup
+- Auth callback handling (`/auth/callback`)
+- Forgot/reset password pages
+- Email verification flow
+- Protected navigation behavior (redirect to signin when needed)
+
+### 2. Profiles Integration
+- Auto-create/update `profiles` row after authentication
+- Google metadata support (name, avatar URL)
+
+### 3. Activities Experience
+- Home page connected to DB published activities
+- Category filtering
+- Search input with empty-state handling
+- Activity cards with image/category styling
+- Activity details page (`/activities/[id]`)
+
+### 4. Booking Flow
+- Quick-book bottom sheet from activity card
+- Slot loading from `activity_slots`
+- Date filtering for slots (calendar input)
+- Booking action via Supabase RPC
+- In-app loading/error states
+
+### 5. Reservations ("Groupes")
+- User reservations page (`/groupes`)
+- Reservation cards with activity + slot info
+- In-app cancel reservation confirmation modal (custom UI, no browser confirm)
+- Cancel action via RPC and immediate UI status update
+
+### 6. Reliability / Architecture Improvements
+- API route for activities (`/api/activities`) to improve client reliability
+- Middleware session update integration
+- Shared types (`src/types`)
+- Data service layer (`src/lib/services/activities.ts`)
+- Hydration/network debugging and cleanup for mobile LAN testing
+
+## Project Structure
+
+```txt
+src/
+  app/
+    api/
+      activities/
+      supabase/status/
+    auth/callback/
+    activities/[id]/
+    signin/
+    signup/
+    forgot-password/
+    reset-password/
+    verify-email/
+    groupes/
+  components/
+  lib/
+    services/
+    supabase/
+  types/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create `.env.local`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-## Learn More
+Notes:
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` is for frontend use.
+- Never expose `service_role` in the frontend.
 
-To learn more about Next.js, take a look at the following resources:
+## Supabase Auth Configuration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+In Supabase dashboard:
+- Set **Site URL**:
+  - local: `http://localhost:3000`
+  - production: `https://your-domain`
+- Add redirect URLs:
+  - `http://localhost:3000/auth/callback`
+  - `https://your-domain/auth/callback`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Run Locally
 
-## Deploy on Vercel
+```bash
+npm install
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+For phone testing on local network:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev -- --hostname 192.168.x.x --port 3000
+```
+
+Then open `http://192.168.x.x:3000` on your phone.
+
+## Build & Quality Checks
+
+```bash
+npm run lint
+npm run build
+```
+
+## Deployment Checklist
+
+1. Configure production env vars in hosting platform.
+2. Update Supabase Auth Site URL and redirect URLs to production domain.
+3. Verify RLS policies for `activities`, `activity_slots`, `bookings`, `profiles`.
+4. Deploy (`npm run build` must pass).
+
+## Repository Workflow
+
+Recommended submission branch:
+- `rendoo_assignment`
+
+Then open PR to `main`.
+
